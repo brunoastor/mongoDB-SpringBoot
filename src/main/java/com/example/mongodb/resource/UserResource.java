@@ -1,8 +1,7 @@
 package com.example.mongodb.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mongodb.domain.User;
+import com.example.mongodb.domain.dto.UserDTO;
 import com.example.mongodb.services.UserService;
 
 @RestController
@@ -21,9 +21,10 @@ public class UserResource {
 	private UserService service;
 	
 	@GetMapping
-	public ResponseEntity<List<User>> findAll(){		
-		List<User> usuarios = service.findAll();		
-		return ResponseEntity.ok().body(usuarios);		
+	public ResponseEntity<List<UserDTO>> findAll(){		
+		List<User> list = service.findAll();
+		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);		
 	}
 
 }
